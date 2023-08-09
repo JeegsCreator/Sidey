@@ -38,9 +38,16 @@ const NavigationMenuList = React.forwardRef<
 ));
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName;
 
-const NavigationMenuItem: React.ElementType = ({ children, className }) => {
+const NavigationMenuItem: React.ElementType = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <NavigationMenuPrimitive.Item className={cn("cursor-pointer", className)}>
+    <NavigationMenuPrimitive.Item
+      className={cn("cursor-pointer", className)}
+      {...props}
+    >
       {children}
     </NavigationMenuPrimitive.Item>
   );
@@ -84,6 +91,25 @@ const NavigationMenuContent = React.forwardRef<
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
 const NavigationMenuLink = NavigationMenuPrimitive.Link;
+
+const navigationMenuNavStyle = cva(
+  "group inline-flex h-10 w-max items-center justify-center rounded-t-md px-4 py-2 text-sm font-medium transition-colors border-b-2 border-transparent hover:bg-accent hover:text-accent-foreground hover:border-slate-300 focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:border-black data-[state=open]:bg-accent/50"
+);
+
+const NavigationMenuNavLink: React.ElementType = ({
+  children,
+  className,
+  ...props
+}) => {
+  return (
+    <NavigationMenuPrimitive.Link
+      className={cn(className, navigationMenuNavStyle())}
+      {...props}
+    >
+      {children}
+    </NavigationMenuPrimitive.Link>
+  );
+};
 
 const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
@@ -129,6 +155,7 @@ export {
   NavigationMenuContent,
   NavigationMenuTrigger,
   NavigationMenuLink,
+  NavigationMenuNavLink,
   NavigationMenuIndicator,
   NavigationMenuViewport,
 };
