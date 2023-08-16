@@ -12,14 +12,16 @@ export async function POST(request: NextRequest) {
 
   if (email === null) throw new Error("Email don't sent");
 
-  await supabase.auth.signInWithOtp({
+  const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${requestUrl.origin}/`,
+      emailRedirectTo: `${requestUrl.origin}/api/auth/callback`,
     },
   });
 
-  return NextResponse.redirect(requestUrl.origin, {
+  if (error) console.error(error);
+
+  return NextResponse.redirect(`${requestUrl.origin}/login/success`, {
     status: 301,
   });
 }

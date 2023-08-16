@@ -2,16 +2,8 @@
 
 import LatestUpdates from "@/components/project/LatestUpdates";
 import ProjectDescription from "@/components/project/ProjectDescription";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -21,7 +13,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { FigmaLogo, GithubLogo } from "@/lib/logos";
 import dayjs from "dayjs";
-import { ArrowRight, LinkIcon, PenIcon, PlusIcon } from "lucide-react";
+import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 
 const latestUpdateList = [
@@ -57,9 +49,9 @@ export default function Home() {
       <header className="mt-6 flex justify-between items-center px-20">
         <div className="group flex gap-6 items-center">
           <div className="flex gap-3 items-center relative">
-            <div className="flex gap-2 absolute -bottom-6 text-slate-500 text-sm">
+            <div className="flex gap-2 absolute -bottom-7 text-slate-500 text-sm">
               <Badge>Building</Badge>
-              <span>• 37 likes</span>
+              <p>• Created by <Link href="/" className="underline">Jeegs</Link> • <span>37</span> likes</p>
             </div>
             {/* //TODO: Toogle show project logo if exist */}
             {/* <Avatar>
@@ -96,20 +88,17 @@ export default function Home() {
           </Button>
         </div>
       </header>
-      <nav className="mt-10 relative">
+      <nav className="mt-14 relative">
         <NavigationMenu className="px-20">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuNavLink active>Overview</NavigationMenuNavLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuNavLink>Design</NavigationMenuNavLink>
+              <NavigationMenuNavLink>Updates</NavigationMenuNavLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuNavLink>Timeline</NavigationMenuNavLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuNavLink>Comments</NavigationMenuNavLink>
+              <NavigationMenuNavLink>Discussion</NavigationMenuNavLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

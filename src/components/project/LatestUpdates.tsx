@@ -29,10 +29,10 @@ const LatestUpdates = ({ list }: { list: Update[] }) => {
   return (
     <Card className="overflow-hidden sticky top-4">
       <CardHeader className="flex-row justify-between items-center py-4">
-        <CardTitle className="mt-1">Latest changes</CardTitle>
+        <CardTitle className="mt-1">Latest Updates</CardTitle>
         <Button asChild variant="ghost" className="text-slate-400">
           <Link href="/">
-            More updates <ArrowRight size={18} className="ml-1" />
+            See more <ArrowRight size={18} className="ml-1" />
           </Link>
         </Button>
       </CardHeader>

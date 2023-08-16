@@ -16,8 +16,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // if user is not signed in and the current path is not / redirect the user to /
-  if (!user && req.nextUrl.pathname !== "/") {
+  // if user is not signed in and the current path is not / or /login redirect the user to /login
+  const ALLOWED_PATHS_WITHOUT_SIGN_IN = ["/", "login"];
+
+  if (!user && ALLOWED_PATHS_WITHOUT_SIGN_IN.includes(req.nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -25,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login"],
+  matcher: ["/", "/login", "/signup", "/project/:path*", "/feed"],
 };
