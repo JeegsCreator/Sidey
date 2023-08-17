@@ -4,8 +4,9 @@ Show your Side Project to the world, takes #BuildInPublic to the next level by l
 
 ## Table of contents
 - [Installation](/#installation)
+- [Env configuration](/#env-configuration)
 - [How to collaborate?](/#how-to-collaborate?)
-  - [Contact Me](/#contact-me) 
+  - [Any questions? Contact Me](/#contact-me) 
 
 # Getting started
 
@@ -13,9 +14,30 @@ Show your Side Project to the world, takes #BuildInPublic to the next level by l
 1. Make a fork of this repository
 2. Install all the dependencies running `pnpm install`
 3. create a project in Supabase
-4. create a .env file following the .env.example structure
+4. create a .env file following the .env.example structure. [Read more](/#env-configuration)
 5. run the command `pnpm prisma db push`
 6. run `pnpm dev`
+
+## Env configuration
+
+#### SUPABASE_PROJECT_ID
+Go into your Supabase project to `settings -> General -> General settings` and get the 'Reference ID' and paste it here
+
+#### SUPABASE_PASSWORD
+This is the password of your Supabase project. if you forget the password you can go into your Supabase project to `settings -> Database -> Database password -> Reset database password` and copy here the new password
+
+#### DATABASE_URL
+Go into your Supabase project to `settings -> Database -> Connection string`, select the 'URI' tab, copy the URL, and paste it here
+
+#### SUPABASE_SECRET_KEY
+Go into your Supabase project to `settings -> API -> Project API keys` and get the 'service_role secret' key and paste it here
+
+#### NEXT_PUBLIC_SUPABASE_ANON_KEY
+Go into your Supabase project to `settings -> API -> Project API keys` and get the 'anon public' key and paste it here
+
+#### NEXT_PUBLIC_SUPABASE_URL
+This has a default value in the [.env.example](/.env.example) file. don't delete it
+
 
 ## How to collaborate?
 
