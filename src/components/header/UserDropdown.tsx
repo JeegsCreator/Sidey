@@ -8,11 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { ChevronDown, Loader2, Plus } from "lucide-react";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
-import { useCallback, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import clsx from "clsx";
