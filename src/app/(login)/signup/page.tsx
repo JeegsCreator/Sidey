@@ -61,8 +61,8 @@ const Page = () => {
       method: "POST",
       body: JSON.stringify(values),
     });
-    console.log(res.status);
-    if (res.status === 401) setUsernameError(true);
+
+    if (res.status === 401) return setUsernameError(true);
     if (res.status === 302) router.push("/");
     if (res.status === 301) router.push("/login");
     setLoading(false);

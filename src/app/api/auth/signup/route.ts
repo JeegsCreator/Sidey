@@ -25,19 +25,20 @@ export async function POST(request: NextRequest) {
   }
 
   const { data: existUsername } = await supabase
-    .from("Profile")
+    .from("profile")
     .select("username")
     .filter("username", "eq", username)
     .single();
 
   if (existUsername) {
+    console.error(new Error("Username already in use"));
     return NextResponse.json(
       { error: "Username already in use" },
       { status: 401, statusText: "Username already in use" },
     );
   }
 
-  const { error } = await supabase.from("Profile").insert({
+  const { error } = await supabase.from("profile").insert({
     id: user?.id,
     name: name,
     username: username,

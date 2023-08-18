@@ -12,14 +12,20 @@ export async function GET(req: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if ( !user ) throw new Error("User not found")
+  if (!user) throw new Error("User not found");
 
-  console.log("USER")
-  
-  const { data } = await supabase.from("Profile").select().filter("id", "eq", user.id).single()
-  console.log(data)
+  console.log("USER");
+
+  const { data } = await supabase
+    .from("profile")
+    .select()
+    .filter("id", "eq", user.id)
+    .single();
+  console.log(data);
   if (!data || !data?.name) {
     return NextResponse.redirect(new URL("/signup", req.url));
   }
