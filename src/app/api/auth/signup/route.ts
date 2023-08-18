@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
-  const requestUrl = new URL(request.url);
   const { name, username, twitter } = await request.json();
   const supabase = createRouteHandlerClient({ cookies });
 
@@ -17,9 +16,12 @@ export async function POST(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.redirect(`${requestUrl.origin}/login`, {
-      status: 301,
-    });
+    return NextResponse.json(
+      {},
+      {
+        status: 301,
+      },
+    );
   }
 
   const { data: existUsername } = await supabase
@@ -43,8 +45,11 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) throw error;
-
-  return NextResponse.redirect(`${requestUrl.origin}`, {
-    status: 301,
-  });
+  console.log("must return");
+  return NextResponse.json(
+    {},
+    {
+      status: 302,
+    },
+  );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import CardSideyFooter from "@/components/CardSideyFooter";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
+import { Router } from "next/router";
 
 const formSchema = z.object({
   name: z
@@ -46,6 +48,7 @@ const formSchema = z.object({
 const Page = () => {
   const [usernameError, setUsernameError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     // @ts-expect-error
@@ -58,7 +61,10 @@ const Page = () => {
       method: "POST",
       body: JSON.stringify(values),
     });
+    console.log(res.status);
     if (res.status === 401) setUsernameError(true);
+    if (res.status === 302) router.push("/");
+    if (res.status === 301) router.push("/login");
     setLoading(false);
   }
 
