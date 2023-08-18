@@ -1,16 +1,10 @@
 "use client";
 
 import LatestUpdates from "@/components/project/LatestUpdates";
+import NavProject from "@/components/project/NavProject";
 import ProjectDescription from "@/components/project/ProjectDescription";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuNavLink,
-} from "@/components/ui/navigation-menu";
-import { Separator } from "@/components/ui/separator";
 import { FigmaLogo, GithubLogo } from "@/lib/logos";
 import dayjs from "dayjs";
 import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
@@ -51,7 +45,13 @@ export default function Home() {
           <div className="flex gap-3 items-center relative">
             <div className="flex gap-2 absolute -bottom-7 text-slate-500 text-sm">
               <Badge>Building</Badge>
-              <p>• Created by <Link href="/" className="underline">Jeegs</Link> • <span>37</span> likes</p>
+              <p>
+                • Created by{" "}
+                <Link href="/" className="underline">
+                  Jeegs
+                </Link>{" "}
+                • <span>37</span> likes
+              </p>
             </div>
             {/* //TODO: Toogle show project logo if exist */}
             {/* <Avatar>
@@ -88,22 +88,7 @@ export default function Home() {
           </Button>
         </div>
       </header>
-      <nav className="mt-14 relative">
-        <NavigationMenu className="px-20">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuNavLink active>Overview</NavigationMenuNavLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuNavLink>Updates</NavigationMenuNavLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuNavLink>Discussion</NavigationMenuNavLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-        <Separator className="absolute bottom-0" />
-      </nav>
+      <NavProject />
       <section className="grid grid-cols-3 px-8 py-4 gap-4">
         <div className="col-start-1 col-end-3">
           <ProjectDescription />

@@ -45,17 +45,23 @@ to learn how to use markdown you can read this [cheat sheet](https://www.markdow
 `;
 
 const Page = () => {
+  const createProject = async (data: z.infer<typeof formSchema>) => {
+    const res = await fetch("/api/project/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    console.log(res);
+  };
   const form = useForm<z.infer<typeof formSchema>>({
-    // @ts-expect-error formSchema
     resolver: zodResolver(formSchema),
   });
   const [description, setDescription] = useState("");
-
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    createProject(values);
   }
 
   return (
@@ -170,7 +176,10 @@ const Page = () => {
                           {...field}
                           placeholder={markdownPlaceholder}
                           value={description}
-                          onChange={(e) => setDescription(e.target.value)}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setDescription(e.target.value);
+                          }}
                           className="h-full pt-4 pb-8 px-4 text-base resize-none"
                         />
                       </FormControl>
@@ -194,6 +203,7 @@ const Page = () => {
                 </Card>
               </CardContent>
             </Card>
+            <Button type="submit">Create Project</Button>
           </form>
         </Form>
       </section>
