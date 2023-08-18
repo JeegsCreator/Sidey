@@ -9,6 +9,10 @@ import { FigmaLogo, GithubLogo } from "@/lib/logos";
 import dayjs from "dayjs";
 import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { capitalize, getIdFromParams } from "@/lib/utils";
+import { profile, project } from "@prisma/client";
 
 const latestUpdateList = [
   {
@@ -37,27 +41,61 @@ const latestUpdateList = [
   },
 ];
 
-export default function Home() {
+export default function Home({ params }: { params: { projectId: string } }) {
+  type ProjectState = project & {
+    profileToProject: { profile: Pick<profile, "name" | "username"> }[];
+  };
+
+  const [projectData, setProjectData] = useState<ProjectState | null>(null);
+
+  useEffect(() => {
+    const getProject = async () => {
+      const supabase = createClientComponentClient();
+
+      const { data, error } = await supabase
+        .from("project")
+        .select("*, profileToProject(profile(name, username))")
+        .filter("id", "eq", getIdFromParams(params.projectId))
+        .filter(
+          "profileToProject.projectId",
+          "eq",
+          getIdFromParams(params.projectId),
+        )
+        .single();
+
+      if (error) console.log(error);
+      if (data) setProjectData(data);
+    };
+
+    getProject();
+  }, []);
+
+  console.log(projectData);
+  if (!projectData) return <h1>Error</h1>;
+
   return (
     <main>
       <header className="mt-6 flex justify-between items-center px-20">
         <div className="group flex gap-6 items-center">
           <div className="flex gap-3 items-center relative">
             <div className="flex gap-2 absolute -bottom-7 text-slate-500 text-sm">
-              <Badge>Building</Badge>
+              <Badge>capitalize(projectData.state)</Badge>
               <p>
                 • Created by{" "}
-                <Link href="/" className="underline">
-                  Jeegs
+                <Link 
+                  href={`/user/${projectData.profileToProject[0].profile.username}`} 
+                  className="underline"
+                >
+                  {projectData.profileToProject[0].profile.name}
                 </Link>{" "}
-                • <span>37</span> likes
+                • <span>{projectData.likes}</span> likes
               </p>
             </div>
             {/* //TODO: Toogle show project logo if exist */}
             {/* <Avatar>
                 <AvatarImage src="/sidey.svg" />
               </Avatar> */}
-            <h1 className="text-3xl font-semibold">Project Title</h1>
+            <h1 className="text-3xl font-semibold">{projectData.name}</h1>
             <Button variant="outline" size="icon" asChild>
               <Link href="/" className="text-sm">
                 <FigmaLogo />
@@ -91,7 +129,7 @@ export default function Home() {
       <NavProject />
       <section className="grid grid-cols-3 px-8 py-4 gap-4">
         <div className="col-start-1 col-end-3">
-          <ProjectDescription />
+          <ProjectDescription markdown={projectData.description} />
         </div>
         <div className="col-start-3 col-end-4">
           <LatestUpdates list={latestUpdateList} />

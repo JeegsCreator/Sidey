@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
-  const requestUrl = new URL(request.url);
   const { name, username, twitter } = await request.json();
   const supabase = createRouteHandlerClient({ cookies });
 
@@ -17,25 +16,29 @@ export async function POST(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.redirect(`${requestUrl.origin}/login`, {
-      status: 301,
-    });
+    return NextResponse.json(
+      {},
+      {
+        status: 301,
+      },
+    );
   }
 
   const { data: existUsername } = await supabase
-    .from("Profile")
+    .from("profile")
     .select("username")
     .filter("username", "eq", username)
     .single();
 
   if (existUsername) {
+    console.error(new Error("Username already in use"));
     return NextResponse.json(
       { error: "Username already in use" },
       { status: 401, statusText: "Username already in use" },
     );
   }
 
-  const { error } = await supabase.from("Profile").insert({
+  const { error } = await supabase.from("profile").insert({
     id: user?.id,
     name: name,
     username: username,
@@ -43,8 +46,11 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) throw error;
-
-  return NextResponse.redirect(`${requestUrl.origin}`, {
-    status: 301,
-  });
+  console.log("must return");
+  return NextResponse.json(
+    {},
+    {
+      status: 302,
+    },
+  );
 }

@@ -2,14 +2,13 @@ import {
   User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
-import { Profile } from "@prisma/client";
+import { profile as profileType } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { redirect } from 'next/navigation'
 
 export function useUser() {
   const [userIsLoading, setUserIsLoading] = useState(true);
-  const [user, setUser] = useState<{ user: User; profile: Profile } | null>(
-    null
+  const [user, setUser] = useState<{ user: User; profile: profileType } | null>(
+    null,
   );
   useEffect(() => {
     const getUser = async () => {
@@ -18,19 +17,18 @@ export function useUser() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      
-      if (!user) return null
-      
-      const { data: profile} = await supabase
-      .from("Profile")
-      .select()
-      .filter("id", "eq", user?.id)
-      .single() as { data: Profile }
 
-      // if (!profile) return redirect("http://localhost:3000/signup")
-      if (!profile)  {
-        window.location.replace("http://localhost:3000/signup")
-        return null
+      if (!user) return null;
+
+      const { data: profile } = (await supabase
+        .from("profile")
+        .select()
+        .filter("id", "eq", user?.id)
+        .single()) as { data: profileType };
+
+      if (!profile) {
+        window.location.replace("http://localhost:3000/signup");
+        return null;
       }
 
       return { user, profile };
@@ -46,7 +44,7 @@ export function useUser() {
   });
 
   return [user, userIsLoading] as [
-    { user: User; profile: Profile } | null,
+    { user: User; profile: profileType } | null,
     boolean,
   ];
 }

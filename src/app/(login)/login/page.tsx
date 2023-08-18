@@ -29,6 +29,7 @@ const Login = () => {
                 id="email"
                 name="email"
                 placeholder="indiecreator@sideproject.com"
+                required
               />
             </CardContent>
             <CardFooter className="flex justify-end">
