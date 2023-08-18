@@ -27,8 +27,7 @@ Go into your Supabase project to `settings -> General -> General settings` and g
 This is the password of your Supabase project. if you forget the password you can go into your Supabase project to `settings -> Database -> Database password -> Reset database password` and copy here the new password
 
 #### DATABASE_URL
-Go into your Supabase project to `settings -> Database -> Connection string`, select the 'URI' tab, copy the URL, and paste it here
-
+Go into your Supabase project to `settings -> Database -> Connection string`, select the 'URI' tab, copy the URL, and paste it here. Make sure to replace `[YOUR_PASSWORD]` with `${SUPABASE_PASSWORD}`
 #### SUPABASE_SECRET_KEY
 Go into your Supabase project to `settings -> API -> Project API keys` and get the 'service_role secret' key and paste it here
 
