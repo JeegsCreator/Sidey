@@ -38,7 +38,7 @@ export async function getUserAndProfile({
     .eq("id", user.session?.user?.id)
     .single();
   return { user, profile, error };
-
+}
 export function getIdFromParams(slug: string) {
   return slug.split("-")[1];
 }

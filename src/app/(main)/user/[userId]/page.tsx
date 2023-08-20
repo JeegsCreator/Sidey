@@ -1,34 +1,53 @@
-"use client"
+import Avvvatars from "avvvatars-react";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/useUser";
-import { TwitterIcon } from "lucide-react";
+import { LinkIcon, TwitterIcon } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
+import { getUser } from "@/app/api/user/getUser";
 
-const Page = () => {
-  const [user] = useUser()
-  return ( <main>
-    <header className="mt-6 flex justify-between items-center px-20">
+export default async function Page() {
+  const user = await getUser({
+    username: "lukafeller",
+  });
+
+  console.log(user);
+  return (
+    <main>
+      <header className="mt-6 flex justify-between items-center container">
         <div className="group flex gap-6 items-center">
-          <div className="flex gap-3 items-center relative">
-            {/* //TODO: Toogle show project logo if exist */}
-            {/* <Avatar>
-                <AvatarImage src="/sidey.svg" />
-              </Avatar> */}
-            <h1 className="text-3xl font-semibold">Zyruks</h1>
-            <Button variant="outline" size="icon" asChild>
-              <Link href="/" className="text-sm">
-                {/* <FigmaLogo /> */}
-                <TwitterIcon />
-              </Link>
-            </Button>
-            <p>@zyruks</p>
-          </div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <div className="flex gap-3 items-center relative">
+              {/* //TODO: Toogle show project logo if exist */}
+
+              <Avvvatars value={user.username} style="shape" />
+
+              <h1 className="text-3xl font-semibold">{user.username}</h1>
+              <Button variant="outline" size="icon" asChild>
+                <Link
+                  href={`https://x.com/${user.twitterUser}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm"
+                >
+                  <TwitterIcon />
+                </Link>
+              </Button>
+              <Button variant="outline" size="icon" asChild>
+                <Link
+                  href={user?.links ? user.links[0] : ""}
+                  className="text-sm"
+                >
+                  <LinkIcon />
+                </Link>
+              </Button>
+            </div>
+          </Suspense>
         </div>
       </header>
-      <section>
+      <section className="container">
         <p>description</p>
       </section>
-  </main> );
+    </main>
+  );
 }
- 
-export default Page;
