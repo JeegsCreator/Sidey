@@ -1,3 +1,5 @@
+import { Project } from "../project/project";
+
 export type User = {
   avatarUrl: string | null;
   id: string;
@@ -6,4 +8,9 @@ export type User = {
   twitterUser: string | null;
   username: string;
   avatarUrl: string | null;
+  profileToProject: {
+    projectId: string;
+    userId: string;
+    project: Project;
+  }[];
 };

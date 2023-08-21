@@ -24,7 +24,6 @@ export async function POST(req: Request) {
   if (ErrorProject || !project) {
     return NextResponse.error();
   }
-  console.log(project, profile);
 
   const { error: ErrorProfileToProject } = await supabase
     .from("profileToProject")
