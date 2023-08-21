@@ -46,7 +46,10 @@ const UserDropdown = () => {
           </DropdownMenuGroup>
           <DropdownMenuGroup>
             <DropdownMenuLabel>Logged as {profile.username}</DropdownMenuLabel>
-            <DropdownMenuItem>Profile setting</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/user/${profile.username}`}>Profile</Link>
+            </DropdownMenuItem>
+            {/* <DropdownMenuItem>Profile setting</DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <form action="/api/auth/signout" method="post">
                 <button className="w-full text-left">Log Out</button>
