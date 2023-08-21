@@ -41,7 +41,7 @@ const formSchema = z.object({
     z
       .string()
       .startsWith("@", { message: "Twitter must start with '@'" })
-      .trim(),
+      .trim()
   ),
 });
 
@@ -51,7 +51,6 @@ const Page = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
-    // @ts-expect-error
     resolver: zodResolver(formSchema),
   });
 
