@@ -1,5 +1,6 @@
 import {
   Session,
+  SupabaseClient,
   createRouteHandlerClient,
 } from "@supabase/auth-helpers-nextjs";
 import { type ClassValue, clsx } from "clsx";
@@ -23,6 +24,7 @@ interface GetUserAndProfileOutput {
       };
   profile: any;
   error: any | null;
+  supabase: SupabaseClient<any, "public", any>;
 }
 
 export async function getUserAndProfile({
@@ -33,12 +35,13 @@ export async function getUserAndProfile({
   });
   const { data: user, error } = await supabase.auth.getSession();
   const { data: profile } = await supabase
-    .from("Profile")
+    .from("profile")
     .select()
     .eq("id", user.session?.user?.id)
     .single();
-  return { user, profile, error };
+  return { user, profile, error, supabase };
 }
+
 export function getIdFromParams(slug: string) {
   return slug.split("-")[1];
 }
