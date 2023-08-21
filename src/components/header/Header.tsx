@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import Image from "next/image";
 import UserDropdown from "./UserDropdown";
+import { ThemeToggle } from "../ui/ThemeProvider";
 
 const Header = () => {
   return (
@@ -47,7 +48,8 @@ const Header = () => {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <div>
+      <div className="flex gap-2 items-center">
+        <ThemeToggle />
         <UserDropdown />
       </div>
     </header>

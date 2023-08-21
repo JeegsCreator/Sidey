@@ -6,7 +6,8 @@
     "dev": "clear && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.2.0",
@@ -27,6 +28,7 @@
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "avvvatars-react": "^0.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.9",
@@ -35,6 +37,7 @@
     "eslint-config-next": "13.4.12",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",
+    "next-themes": "^0.2.1",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -47,6 +50,7 @@
     "zod": "^3.22.1"
   },
   "devDependencies": {
-    "prisma": "^5.1.1"
+    "prisma": "^5.1.1",
+    "husky": "^8.0.0"
   }
 }
