@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export function useUser() {
   const [userIsLoading, setUserIsLoading] = useState(true);
   const [user, setUser] = useState<{ user: User; profile: profileType } | null>(
-    null,
+    null
   );
   useEffect(() => {
     const getUser = async () => {
@@ -41,10 +41,10 @@ export function useUser() {
       .finally(() => {
         setUserIsLoading(false);
       });
-  });
+  }, []);
 
   return [user, userIsLoading] as [
     { user: User; profile: profileType } | null,
-    boolean,
+    boolean
   ];
 }
