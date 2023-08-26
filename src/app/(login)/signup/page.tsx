@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import CardSideyFooter from "@/components/CardSideyFooter";
-import { Button } from "@/components/ui/button";
+import { ButtonWithLoading } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -24,8 +24,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
-import { Router } from "next/router";
 
 const formSchema = z.object({
   name: z
@@ -37,12 +35,10 @@ const formSchema = z.object({
     .min(3, { message: "Username must be 3 or more characters long" })
     .toLowerCase()
     .trim(),
-  twitter: z.optional(
-    z
-      .string()
-      .startsWith("@", { message: "Twitter must start with '@'" })
-      .trim()
-  ),
+  twitter: z
+    .string()
+    .startsWith("@", { message: "Twitter must start with '@'" })
+    .trim(),
 });
 
 const Page = () => {
@@ -132,12 +128,9 @@ const Page = () => {
                   />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button type="submit" disabled={loading}>
-                    {loading && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
+                  <ButtonWithLoading type="submit" loading={loading}>
                     Save
-                  </Button>
+                  </ButtonWithLoading>
                 </CardFooter>
               </form>
             </Form>

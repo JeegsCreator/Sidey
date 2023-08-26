@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import clsx from "clsx";
 import { useUser } from "@/hooks/useUser";
+import Avvvatars from "avvvatars-react";
 
 const UserDropdown = () => {
   const [data, userIsLoading] = useUser();
@@ -21,12 +22,7 @@ const UserDropdown = () => {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger className="border border-slate-300 rounded-md py-1 px-2 flex items-center gap-1">
-          <Avatar>
-            <AvatarFallback>
-              {profile.username?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-            {/* <AvatarImage src={} /> */}
-          </Avatar>
+          <Avatar value={profile.username} />
           <ChevronDown className="text-slate-400" size={18} />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-[200px]">
@@ -45,7 +41,7 @@ const UserDropdown = () => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Logged as {profile.username}</DropdownMenuLabel>
+            <DropdownMenuLabel>Logged as {profile.name}</DropdownMenuLabel>
             <DropdownMenuItem asChild>
               <Link href={`/user/${profile.username}`}>Profile</Link>
             </DropdownMenuItem>

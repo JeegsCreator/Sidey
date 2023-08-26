@@ -1,11 +1,11 @@
-import type { User } from "./user";
+import type { Profile } from "./user";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 // This is likely a module that is only used on the server-side.
 // import "server-only";
 
 // Define an asynchronous function called `getUser` that takes an object with a `username` property as its argument.
-export async function getUser({ username }: { username: string }) {
+export async function getProfile({ username }: { username: string }) {
   if (!username) {
     throw new Error("username is required");
   }
@@ -32,5 +32,5 @@ export async function getUser({ username }: { username: string }) {
   }
 
   // Return the data from the query as a `User` object.
-  return data as User;
+  return data as Profile;
 }

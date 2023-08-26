@@ -4,6 +4,9 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
+import { ClassNameValue } from "tailwind-merge";
+import { cn } from "@/lib/utils";
+import Empty from "../shared/Empty";
 
 type Update = { title: string; href: string; createdDate: string; id: string };
 
@@ -25,23 +28,35 @@ const UpdateItem = ({ update }: { update: Update }) => {
   );
 };
 
-const LatestUpdates = ({ list }: { list: Update[] }) => {
+const LatestUpdates = ({
+  list,
+  className = "",
+}: {
+  list: Update[];
+  className?: ClassNameValue;
+}) => {
   return (
-    <Card className="overflow-hidden sticky top-4">
+    <Card className={cn("overflow-hidden sticky top-4", className)}>
       <CardHeader className="flex-row justify-between items-center py-4">
         <CardTitle className="mt-1">Latest Updates</CardTitle>
-        <Button asChild variant="ghost" className="text-slate-400">
-          <Link href="/">
-            See more <ArrowRight size={18} className="ml-1" />
-          </Link>
-        </Button>
+        {list.length > 0 && (
+          <Button asChild variant="ghost" className="text-slate-400">
+            <Link href="/">
+              See more <ArrowRight size={18} className="ml-1" />
+            </Link>
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="pl-7 h-[calc(100%-80px)]">
-        <ul className="border-l border-slate-300 h-full px-6 relative flex flex-col gap-4">
-          {list.map((update) => {
-            return <UpdateItem key={update.id} update={update} />;
-          })}
-        </ul>
+        {list.length > 0 ? (
+          <ul className="border-l border-slate-300 h-full px-6 relative flex flex-col gap-4">
+            {list.map((update) => {
+              return <UpdateItem key={update.id} update={update} />;
+            })}
+          </ul>
+        ) : (
+          <Empty message="There are no updates" />
+        )}
       </CardContent>
     </Card>
   );

@@ -8,7 +8,7 @@ import { Separator } from "../ui/separator";
 
 const NavProject = () => {
   return (
-    <nav className="mt-14 relative">
+    <nav className="mt-10 relative">
       <NavigationMenu className="px-20">
         <NavigationMenuList>
           <NavigationMenuItem>

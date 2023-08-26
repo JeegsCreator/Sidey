@@ -1,11 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ButtonWithLoading } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,33 +25,59 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
+import { project } from "@prisma/client";
+import { getProjectUrl } from "@/lib/utils";
 
 const formSchema = z.object({
-  projectName: z.string().min(2).max(255),
+  projectName: z
+    .string()
+    .min(2, { message: "Project name must contain at least 2 characters" })
+    .max(255, { message: "Project name must contain at most 255 characters" }),
+  tagline: z
+    .string()
+    .min(2, { message: "Tagline must contain at least 2 characters" })
+    .max(255, { message: "Tagline must contain at most 255 characters" }),
   description: z.string(),
-  figmaLink: z.optional(z.string().url()),
-  githubLink: z.optional(z.string().url()),
-  projectLink: z.optional(z.string().url()),
+  figmaLink: z.optional(z.string().url().or(z.string().max(0))),
+  githubLink: z.optional(z.string().url().or(z.string().max(0))),
+  projectLink: z.optional(z.string().url().or(z.string().max(0))),
 });
 
-const markdownPlaceholder = `# What is markdown?
+const markdownPlaceholder = `
+# What is markdown?
 
 Markdown is a simple markup language used to easily add formatting, links and images to plain text.
---- 
+
+---
+
 to learn how to use markdown you can read this [cheat sheet](https://www.markdownguide.org/cheat-sheet/)
 
 ![markdown logo](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/1200px-Markdown-mark.svg.png)
 `;
 
 const Page = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const createProject = async (data: z.infer<typeof formSchema>) => {
-    const res = await fetch("/api/project/create", {
+    setLoading(true);
+
+    fetch("/api/project/create", {
       method: "POST",
       body: JSON.stringify(data),
-    });
-
-    console.log(res);
+    })
+      .then(async (res) => {
+        console.log(res);
+        if (res.status === 200) {
+          const data: project = await res.json();
+          console.log(data);
+          router.push(getProjectUrl(data));
+        }
+      })
+      .finally(() => setLoading(false));
   };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -74,89 +99,102 @@ const Page = () => {
       <section>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Basic information</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-8">
-                <FormField
-                  control={form.control}
-                  name="projectName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Project Name *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Sidey | The home of your Side Projects"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        The name of your side project + the tagline if you want
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="figmaLink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Figma Link (optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://www.figma.com/asdasdasfasfas"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Go to your figma file and ... copy the link
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="githubLink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>GitHub Link (optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://www.github.com/asdasdasfasfas"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        The link of your GitHub repository
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="projectLink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Project Link (optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://www.projectdomaion.app/"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        If your project is already deployed paste here the link
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
+            <div className="grid grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Basic information</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <FormField
+                    control={form.control}
+                    name="projectName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Project Name *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Sidey" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="tagline"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tagline *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="The home of your Side Projects"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Links</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <FormField
+                    control={form.control}
+                    name="figmaLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Figma Link (optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://www.figma.com/example"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This link must be read-only
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="githubLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>GitHub Link (optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://www.github.com/user/repository"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="projectLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Project Link (optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://www.projectdomain.app/"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </div>
             <Card>
               <CardHeader>
                 <CardTitle>Description</CardTitle>
@@ -203,7 +241,11 @@ const Page = () => {
                 </Card>
               </CardContent>
             </Card>
-            <Button type="submit">Create Project</Button>
+            <div className="pb-12 flex justify-end">
+              <ButtonWithLoading type="submit" loading={loading}>
+                Create Project
+              </ButtonWithLoading>
+            </div>
           </form>
         </Form>
       </section>

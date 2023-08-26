@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { LinkIcon, TwitterIcon } from "lucide-react";
 import Link from "next/link";
 import { User } from "@/app/api/user/user";
+import { useRef } from "react";
 
 interface ProfileHeaderProps {
   user: User;
@@ -13,7 +14,9 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     <header className="my-6 flex justify-between items-center container">
       <div className="group flex gap-6 items-center">
         <div className="flex gap-3 items-center relative">
-          <Avvvatars value={user.username} style="shape" size={35} />
+          <div className="">
+            <Avvvatars value="Avocado" style="shape" size={35} />
+          </div>
           <h1 className="text-3xl font-semibold">{user.username}</h1>
           <Button variant="outline" size="icon" asChild>
             <Link

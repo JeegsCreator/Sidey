@@ -1,5 +1,5 @@
 import Avvvatars from "avvvatars-react";
-import { User } from "@/app/api/user/user";
+import { Profile } from "@/app/api/user/user";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { capitalize } from "@/lib/utils";
@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 interface ProjectsCardProps {
-  projects: User["profileToProject"];
+  projects: Profile["profileToProject"];
 }
 
 const ProjectsCard = ({ projects }: ProjectsCardProps) => {

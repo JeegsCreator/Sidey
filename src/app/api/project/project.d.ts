@@ -5,15 +5,3 @@ export enum ProjectState {
   LIVE = "LIVE",
   ABANDONED = "ABANDONED",
 }
-
-export type Project = {
-  id: number;
-  name: string;
-  description: string;
-  state: ProjectState;
-  likes: number;
-  figmaLink: string | null;
-  githubLink: string | null;
-  projectLink: string | null;
-  createdAt: string;
-};

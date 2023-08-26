@@ -34,6 +34,12 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    --blue: #31c0ff;
+    --green: #68eaae;
+    --purple: #8761ff;
+    --red: #ff4e78;
+    --yellow: #f9c32d;
   }
 
   .dark {
