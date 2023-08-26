@@ -11,7 +11,7 @@ import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { capitalize, getIdFromParams } from "@/lib/utils";
+import { isUserOwnerClient, capitalize, getIdFromParams } from "@/lib/utils";
 import { profile, project } from "@prisma/client";
 
 const latestUpdateList = [
@@ -47,14 +47,19 @@ export default function Home({ params }: { params: { projectId: string } }) {
   };
 
   const [projectData, setProjectData] = useState<ProjectState | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const getProject = async () => {
       const supabase = createClientComponentClient();
-
+      type Data = project & {
+        profileToProject: {
+          profile: Pick<profile, "name" | "username" | "id">;
+        }[];
+      };
       const { data, error } = await supabase
         .from("project")
-        .select("*, profileToProject(profile(name, username))")
+        .select("*, profileToProject(profile(name, username, id))")
         .filter("id", "eq", getIdFromParams(params.projectId))
         .filter(
           "profileToProject.projectId",
@@ -63,8 +68,16 @@ export default function Home({ params }: { params: { projectId: string } }) {
         )
         .single();
 
+      const info: Data = data;
+
       if (error) console.log(error);
-      if (data) setProjectData(data);
+      if (info) {
+        setProjectData(info);
+        console.log(data);
+        const ownersId = info.profileToProject.map((p) => p.profile.id);
+        const toSet = await isUserOwnerClient(...ownersId);
+        setIsOwner(toSet);
+      }
     };
 
     getProject();
@@ -77,13 +90,46 @@ export default function Home({ params }: { params: { projectId: string } }) {
     <main>
       <header className="mt-6 flex justify-between items-center px-20">
         <div className="group flex gap-6 items-center">
-          <div className="flex gap-3 items-center relative">
-            <div className="flex gap-2 absolute -bottom-7 text-slate-500 text-sm">
-              <Badge>capitalize(projectData.state)</Badge>
+          <div className="flex flex-col relative gap-2">
+            <div className="flex gap-3 items-center">
+              <h1 className="text-3xl font-semibold">{projectData.name}</h1>
+              {projectData.figmaLink && (
+                <Button variant="outline" size="icon" asChild>
+                  <Link href={projectData.figmaLink} className="text-sm">
+                    <FigmaLogo />
+                  </Link>
+                </Button>
+              )}
+              {projectData.githubLink && (
+                <Button variant="outline" size="icon" asChild>
+                  <Link href={projectData.githubLink} className="text-sm">
+                    <GithubLogo />
+                  </Link>
+                </Button>
+              )}
+              {projectData.projectLink && (
+                <Button variant="outline" size="icon" asChild>
+                  <Link href={projectData.projectLink}>
+                    <LinkIcon size={18} />
+                  </Link>
+                </Button>
+              )}
+              {isOwner && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-slate-400 opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+                >
+                  <PenIcon size={12} />
+                </Button>
+              )}
+            </div>
+            <div className="flex gap-2 -bottom-7 text-slate-500 text-sm">
+              <Badge>{capitalize(projectData.state)}</Badge>
               <p>
                 • Created by{" "}
-                <Link 
-                  href={`/user/${projectData.profileToProject[0].profile.username}`} 
+                <Link
+                  href={`/user/${projectData.profileToProject[0].profile.username}`}
                   className="underline"
                 >
                   {projectData.profileToProject[0].profile.name}
@@ -91,39 +137,14 @@ export default function Home({ params }: { params: { projectId: string } }) {
                 • <span>{projectData.likes}</span> likes
               </p>
             </div>
-            {/* //TODO: Toogle show project logo if exist */}
-            {/* <Avatar>
-                <AvatarImage src="/sidey.svg" />
-              </Avatar> */}
-            <h1 className="text-3xl font-semibold">{projectData.name}</h1>
-            <Button variant="outline" size="icon" asChild>
-              <Link href="/" className="text-sm">
-                <FigmaLogo />
-              </Link>
-            </Button>
-            <Button variant="outline" size="icon" asChild>
-              <Link href="/" className="text-sm">
-                <GithubLogo />
-              </Link>
-            </Button>
-            <Button variant="outline" size="icon" asChild>
-              <Link href="/">
-                <LinkIcon size={18} />
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-slate-400 opacity-0 invisible group-hover:opacity-100 group-hover:visible"
-            >
-              <PenIcon size={12} />
-            </Button>
           </div>
         </div>
         <div className="flex gap-3">
-          <Button className="flex gap-2">
-            <PlusIcon size={18} /> Add Update
-          </Button>
+          {isOwner && (
+            <Button className="flex gap-2">
+              <PlusIcon size={18} /> Add Update
+            </Button>
+          )}
         </div>
       </header>
       <NavProject />

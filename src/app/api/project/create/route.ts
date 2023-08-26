@@ -1,12 +1,14 @@
 // import prisma from "@/lib/prisma";
-import { getUserAndProfile } from "@/lib/utils";
+import { getSessionInServer } from "@/lib/utilsServer";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const data = await req.json();
   const cookieStore = cookies();
-  const { profile, error, supabase } = await getUserAndProfile({ cookieStore });
+  const { profile, error, supabase } = await getSessionInServer({
+    cookieStore,
+  });
   if (error) {
     return NextResponse.error();
   }

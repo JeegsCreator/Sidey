@@ -14,6 +14,8 @@ import {
 import Image from "next/image";
 import UserDropdown from "./UserDropdown";
 import { ThemeToggle } from "../ui/ThemeProvider";
+import { Search } from "lucide-react";
+import { InputWithIcon } from "../ui/input";
 
 const Header = () => {
   return (
@@ -49,6 +51,7 @@ const Header = () => {
         </NavigationMenu>
       </div>
       <div className="flex gap-2 items-center">
+        <InputWithIcon placeholder="Search (ctrl + k)" Icon={Search} />
         <ThemeToggle />
         <UserDropdown />
       </div>

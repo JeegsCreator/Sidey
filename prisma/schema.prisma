@@ -12,12 +12,13 @@ datasource db {
 model project {
   id               Int                @id @default(autoincrement())
   name             String             @db.VarChar(255)
+  tagline          String             @db.VarChar(255)
   description      String
   state            ProjectStates      @default(BUILDING)
   likes            Int                @default(0)
-  figmaLink        String?
-  githubLink       String?
-  projectLink      String?
+  figmaLink        String             @default("")
+  githubLink       String             @default("")
+  projectLink      String             @default("")
   createdAt        DateTime           @default(now())
   profileToproject profileToProject[]
   updates          update[]
@@ -47,6 +48,27 @@ model profile {
   links            String[]
   user             users              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   profileToproject profileToProject[]
+
+  @@schema("public")
+}
+
+model profileToProject {
+  userId       String  @db.Uuid
+  projectId       Int
+  profile profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  project project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([userId, projectId], map: "profileToproject_userIdprojectId_unique")
+  @@index([projectId], map: "profileToproject_projectId_index")
+  @@schema("public")
+}
+
+enum ProjectStates {
+  BUILDING
+  ALPHA
+  BETA
+  LIVE
+  ABANDONED
 
   @@schema("public")
 }
@@ -322,27 +344,6 @@ model users {
 
   @@index([instance_id])
   @@schema("auth")
-}
-
-model profileToProject {
-  userId       String  @db.Uuid
-  projectId       Int
-  profile profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  project project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@unique([userId, projectId], map: "profileToproject_userIdprojectId_unique")
-  @@index([projectId], map: "profileToproject_projectId_index")
-  @@schema("public")
-}
-
-enum ProjectStates {
-  BUILDING
-  ALPHA
-  BETA
-  LIVE
-  ABANDONED
-
-  @@schema("public")
 }
 
 enum aal_level {

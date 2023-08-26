@@ -1,16 +1,9 @@
-import { Project } from "../project/project";
+import { profile, project } from "@prisma/client";
 
-export type User = {
-  avatarUrl: string | null;
-  id: string;
-  links: string[] | null;
-  name: string | null;
-  twitterUser: string | null;
-  username: string;
-  avatarUrl: string | null;
+export type Profile = profile & {
   profileToProject: {
     projectId: string;
     userId: string;
-    project: Project;
+    project: project;
   }[];
 };
