@@ -38,3 +38,8 @@ export async function isUserOwnerClient(...pageIds: string[]) {
 
   return pageIds.includes(session.profile.id);
 }
+
+export function getPathnameRoute(slug: string) {
+  const pathname = slug.split("/");
+  return pathname[pathname.length - 1];
+}
