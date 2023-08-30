@@ -7,18 +7,17 @@ import { ArrowRight } from "lucide-react";
 import { ClassNameValue } from "tailwind-merge";
 import { cn } from "@/lib/utils";
 import Empty from "../shared/Empty";
-
-type Update = { title: string; href: string; createdDate: string; id: string };
+import { Update } from "@/app/api/project/project";
 
 dayjs.extend(relativeTime);
 
 const UpdateItem = ({ update }: { update: Update }) => {
   return (
     <li className="group">
-      <Link href={update.href}>
+      <Link href={`/project/${update.projectId}/updates/${update.id}`}>
         <div className="absolute aspect-square h-2.5 rounded-full bg-slate-300 -left-[.323rem] mt-0.5 outline outline-2 outline-white"></div>
         <p className="text-sm text-slate-400 leading-none capitalize">
-          {dayjs(update.createdDate).fromNow()}
+          {dayjs(update.createdAt).fromNow()}
         </p>
         <p className="leading-none mt-1.5 group-hover:text-slate-500">
           {update.title}
