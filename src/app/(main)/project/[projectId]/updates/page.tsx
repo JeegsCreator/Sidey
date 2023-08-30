@@ -1,37 +1,9 @@
 import LatestUpdates from "@/components/project/LatestUpdates";
-import dayjs from "dayjs";
 import { getProject } from "@/app/api/project/getProject";
 import CreateUpdateForm from "@/components/updates/CreteUpdateForm";
 import { getIdFromParams } from "@/lib/utils";
 
-const latestUpdateList = [
-  {
-    id: "1",
-    title: "Project Created",
-    href: "/",
-    createdDate: dayjs().toString(),
-  },
-  {
-    id: "2",
-    title: "Launch in Product Hunt",
-    href: "/",
-    createdDate: dayjs("2023-08-06").toString(),
-  },
-  {
-    id: "3",
-    title: "Launch in Product Hunt",
-    href: "/",
-    createdDate: dayjs("2023-07-06").toString(),
-  },
-  {
-    id: "4",
-    title: "Mi mamá me mima mi mamá",
-    href: "/",
-    createdDate: dayjs("2021-07-06").toString(),
-  },
-];
-
-export default async function Update({
+export default async function UpdatePage({
   params: { projectId },
 }: {
   params: { projectId: string };
@@ -39,11 +11,12 @@ export default async function Update({
   const { project: projectData, isOwner } = await getProject({
     projectId: projectId,
   });
+
   return (
     <section className="grid grid-cols-1 px-8 py-4 gap-4 container">
       {isOwner && <CreateUpdateForm projectId={getIdFromParams(projectId)} />}
       <div>
-        <LatestUpdates list={latestUpdateList} />
+        <LatestUpdates list={projectData.update} />
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { project } from "@prisma/client";
+import { project, update } from "@prisma/client";
 
 export enum ProjectState {
   BUILDING = "BUILDING",
@@ -8,8 +8,11 @@ export enum ProjectState {
   ABANDONED = "ABANDONED",
 }
 
+export interface Update extends update {}
+
 export interface Project extends project {
   profileToProject: {
     profile: Pick<profile, "name" | "username" | "id">;
   }[];
+  update: Update[];
 }

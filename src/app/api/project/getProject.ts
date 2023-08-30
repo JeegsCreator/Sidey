@@ -21,7 +21,9 @@ export async function getProject({ projectId }: { projectId: string }) {
   // Query the Supabase client for a single row from the "profile" table where the "username" column equals the `username` argument.
   const { data, error } = await supabase
     .from("project")
-    .select("*, profileToProject(profile(name, username, id))")
+    .select(
+      "*, profileToProject(profile(name, username, id)), update(id, title, description, createdAt, projectId)"
+    )
     .filter("id", "eq", getIdFromParams(projectId))
     .filter("profileToProject.projectId", "eq", getIdFromParams(projectId))
     .single();
