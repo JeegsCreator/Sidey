@@ -2,6 +2,7 @@ import LatestUpdates from "@/components/project/LatestUpdates";
 import dayjs from "dayjs";
 import { getProject } from "@/app/api/project/getProject";
 import CreateUpdateForm from "@/components/updates/CreteUpdateForm";
+import { getIdFromParams } from "@/lib/utils";
 
 const latestUpdateList = [
   {
@@ -40,7 +41,7 @@ export default async function Update({
   });
   return (
     <section className="grid grid-cols-1 px-8 py-4 gap-4 container">
-      <CreateUpdateForm />
+      {isOwner && <CreateUpdateForm projectId={getIdFromParams(projectId)} />}
       <div>
         <LatestUpdates list={latestUpdateList} />
       </div>

@@ -16,7 +16,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { z } from "zod";
-import { Button } from "../ui/button";
+import { Button, ButtonWithLoading } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const formSchema = z.object({
   title: z
@@ -40,20 +42,36 @@ const markdownPlaceholder = `
   `;
 
 interface CreateUpdateFormProps {
-  projectData: Project;
-  isOwner: boolean;
+  projectId: string;
 }
 
-const CreateUpdateForm = () => {
+const CreateUpdateForm = ({ projectId }: CreateUpdateFormProps) => {
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-  const [description, setDescription] = useState("");
-  // 2. Define a submit handler.
+
+  const createUpdate = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+
+    const res = await fetch("/api/update/create", {
+      method: "POST",
+      body: JSON.stringify({ projectId, ...data }),
+    });
+
+    if (res.status === 200) {
+      const data = await res.json();
+      console.log(data);
+    }
+    setLoading(false);
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    createUpdate(values);
   }
   return (
     <Card>
@@ -76,30 +94,48 @@ const CreateUpdateForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description *</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder={markdownPlaceholder}
-                      value={description}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        setDescription(e.target.value);
-                      }}
-                      className="h-52 pt-4 pb-8 px-4 text-base resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4 items-end">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description *</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder={markdownPlaceholder}
+                        value={description}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setDescription(e.target.value);
+                        }}
+                        className="h-72 pt-4 pb-8 px-4 text-base resize-none"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Card className="h-72">
+                <ScrollArea className="h-72 relative">
+                  <span className="absolute text-slate-400 text-sm right-8 top-4">
+                    Markdown preview
+                  </span>
+                  <CardContent className="pt-4 pb-8">
+                    <ReactMarkdown className="markdown">
+                      {description.length > 0
+                        ? description
+                        : markdownPlaceholder}
+                    </ReactMarkdown>
+                  </CardContent>
+                </ScrollArea>
+              </Card>
+            </div>
             <div className="flex justify-end">
-              <Button type="submit">Add Update</Button>
+              <ButtonWithLoading type="submit" loading={loading}>
+                Add Update
+              </ButtonWithLoading>
             </div>
           </form>
         </Form>
