@@ -19,6 +19,7 @@ import { z } from "zod";
 import { Button, ButtonWithLoading } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { MARKDOWN_PLACEHOLDER } from "@/lib/constants";
 
 const formSchema = z.object({
   title: z
@@ -28,18 +29,6 @@ const formSchema = z.object({
   description: z.string(),
   projectId: z.optional(z.string()),
 });
-
-const markdownPlaceholder = `
-  # What is markdown?
-  
-  Markdown is a simple markup language used to easily add formatting, links and images to plain text.
-  
-  ---
-  
-  to learn how to use markdown you can read this [cheat sheet](https://www.markdownguide.org/cheat-sheet/)
-  
-  ![markdown logo](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/1200px-Markdown-mark.svg.png)
-  `;
 
 interface CreateUpdateFormProps {
   projectId: string;
@@ -104,7 +93,7 @@ const CreateUpdateForm = ({ projectId }: CreateUpdateFormProps) => {
                     <FormControl>
                       <Textarea
                         {...field}
-                        placeholder={markdownPlaceholder}
+                        placeholder={MARKDOWN_PLACEHOLDER}
                         value={description}
                         onChange={(e) => {
                           field.onChange(e);
@@ -126,7 +115,7 @@ const CreateUpdateForm = ({ projectId }: CreateUpdateFormProps) => {
                     <ReactMarkdown className="markdown">
                       {description.length > 0
                         ? description
-                        : markdownPlaceholder}
+                        : MARKDOWN_PLACEHOLDER}
                     </ReactMarkdown>
                   </CardContent>
                 </ScrollArea>
