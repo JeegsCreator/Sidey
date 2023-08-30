@@ -28,6 +28,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { project } from "@prisma/client";
 import { getProjectUrl } from "@/lib/utils";
+import { MARKDOWN_PLACEHOLDER } from "@/lib/constants";
 
 const formSchema = z.object({
   projectName: z
@@ -43,18 +44,6 @@ const formSchema = z.object({
   githubLink: z.optional(z.string().url().or(z.string().max(0))),
   projectLink: z.optional(z.string().url().or(z.string().max(0))),
 });
-
-const markdownPlaceholder = `
-# What is markdown?
-
-Markdown is a simple markup language used to easily add formatting, links and images to plain text.
-
----
-
-to learn how to use markdown you can read this [cheat sheet](https://www.markdownguide.org/cheat-sheet/)
-
-![markdown logo](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/1200px-Markdown-mark.svg.png)
-`;
 
 const Page = () => {
   const router = useRouter();
@@ -212,7 +201,7 @@ const Page = () => {
                       <FormControl>
                         <Textarea
                           {...field}
-                          placeholder={markdownPlaceholder}
+                          placeholder={MARKDOWN_PLACEHOLDER}
                           value={description}
                           onChange={(e) => {
                             field.onChange(e);
@@ -234,7 +223,7 @@ const Page = () => {
                       <ReactMarkdown className="markdown">
                         {description.length > 0
                           ? description
-                          : markdownPlaceholder}
+                          : MARKDOWN_PLACEHOLDER}
                       </ReactMarkdown>
                     </CardContent>
                   </ScrollArea>
