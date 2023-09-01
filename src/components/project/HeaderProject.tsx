@@ -5,7 +5,8 @@ import { FigmaLogo, GithubLogo } from "@/lib/logos";
 import ButtonIcon from "../shared/ButtonIcon";
 import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { capitalize } from "@/lib/utils";
+import { capitalize, getIdFromParams } from "@/lib/utils";
+import CreateUpdateSheet from "../update/CreateUpdateSheet";
 
 interface HeaderProjectProps {
   projectData: Project;
@@ -65,11 +66,7 @@ const HeaderProject = ({ projectData, isOwner }: HeaderProjectProps) => {
         </div>
       </div>
       <div className="flex gap-3">
-        {isOwner && (
-          <Button className="flex gap-2">
-            <PlusIcon size={18} /> Add Update
-          </Button>
-        )}
+        {isOwner && <CreateUpdateSheet projectId={projectData.id} />}
       </div>
     </header>
   );

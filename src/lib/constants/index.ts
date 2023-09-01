@@ -1,5 +1,4 @@
-export const MARKDOWN_PLACEHOLDER = `
-# What is markdown?
+export const MARKDOWN_PLACEHOLDER = `# What is markdown?
 
 Markdown is a simple markup language used to easily add formatting, links and images to plain text.
 

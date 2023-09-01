@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
@@ -10,6 +11,7 @@ import Empty from "../shared/Empty";
 import { Update } from "@/app/api/project/project";
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 const UpdateItem = ({ update }: { update: Update }) => {
   return (
@@ -17,7 +19,7 @@ const UpdateItem = ({ update }: { update: Update }) => {
       <Link href={`/project/${update.projectId}/updates/${update.id}`}>
         <div className="absolute aspect-square h-2.5 rounded-full bg-slate-300 -left-[.323rem] mt-0.5 outline outline-2 outline-white"></div>
         <p className="text-sm text-slate-400 leading-none capitalize">
-          {dayjs(update.createdAt).fromNow()}
+          {dayjs.utc(update.createdAt).fromNow()}
         </p>
         <p className="leading-none mt-1.5 group-hover:text-slate-500">
           {update.title}
