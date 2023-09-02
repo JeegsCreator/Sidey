@@ -8,10 +8,10 @@ export default async function ProjectPage({
 }: {
   params: { projectId: string };
 }) {
-  const { project: projectData } = await getProject({
+  const { project: projectData, latestUpdates } = await getProject({
     projectId: projectId,
   });
-  console.log("updates", projectData.update);
+  console.log("updates", latestUpdates);
   return (
     <section className="grid grid-cols-3 px-8 py-4 gap-4 container">
       <Suspense fallback={<p>Loading...</p>}>
@@ -19,7 +19,7 @@ export default async function ProjectPage({
           <ProjectDescription markdown={projectData.description} />
         </div>
         <div className="col-start-3 col-end-4">
-          <LatestUpdates list={projectData.update} />
+          <LatestUpdates list={latestUpdates} project={projectData} />
         </div>
       </Suspense>
     </section>

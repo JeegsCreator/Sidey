@@ -10,9 +10,12 @@ export enum ProjectState {
 
 export interface Update extends update {}
 
+export interface UpdateWithProject extends update {
+  project: project;
+}
+
 export interface Project extends project {
   profileToProject: {
     profile: Pick<profile, "name" | "username" | "id">;
   }[];
-  update: Update[];
 }

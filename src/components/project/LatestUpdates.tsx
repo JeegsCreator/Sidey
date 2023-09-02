@@ -6,9 +6,9 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { ClassNameValue } from "tailwind-merge";
-import { cn } from "@/lib/utils";
+import { cn, getProjectUrl } from "@/lib/utils";
 import Empty from "../shared/Empty";
-import { Update } from "@/app/api/project/project";
+import { Project, Update } from "@/app/api/project/project";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -32,9 +32,11 @@ const UpdateItem = ({ update }: { update: Update }) => {
 const LatestUpdates = ({
   list,
   className = "",
+  project,
 }: {
   list: Update[];
   className?: ClassNameValue;
+  project: Project;
 }) => {
   return (
     <Card className={cn("overflow-hidden sticky top-4", className)}>
@@ -42,7 +44,7 @@ const LatestUpdates = ({
         <CardTitle className="mt-1">Latest Updates</CardTitle>
         {list.length > 0 && (
           <Button asChild variant="ghost" className="text-slate-400">
-            <Link href="/">
+            <Link href={getProjectUrl(project) + "/updates"}>
               See more <ArrowRight size={18} className="ml-1" />
             </Link>
           </Button>
