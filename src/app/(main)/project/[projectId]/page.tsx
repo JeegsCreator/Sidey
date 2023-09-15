@@ -11,7 +11,7 @@ export default async function ProjectPage({
   const { project: projectData, latestUpdates } = await getProject({
     projectId: projectId,
   });
-  console.log("updates", latestUpdates);
+
   return (
     <section className="grid grid-cols-3 px-8 py-4 gap-4 container">
       <Suspense fallback={<p>Loading...</p>}>

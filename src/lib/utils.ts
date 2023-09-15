@@ -29,8 +29,8 @@ export function capitalize(string: string) {
 }
 
 export function getProjectUrl(project: project) {
-  const projectName = encodeURI(project.name.split(" ").join("_"));
-  return `/project/${projectName}-${project.id}`;
+  const projectName = encodeURI(project?.name.split(" ").join("_"));
+  return `/project/${projectName}-${project?.id || ""}`;
 }
 
 export async function isUserOwnerClient(...pageIds: string[]) {

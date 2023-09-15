@@ -3,10 +3,11 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { FigmaLogo, GithubLogo } from "@/lib/logos";
 import ButtonIcon from "../shared/ButtonIcon";
-import { LinkIcon, PenIcon, PlusIcon } from "lucide-react";
+import { LinkIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { capitalize, getIdFromParams } from "@/lib/utils";
+import { capitalize } from "@/lib/utils";
 import CreateUpdateSheet from "../update/CreateUpdateSheet";
+import ProjectFormSheet from "./FormSheet";
 
 interface HeaderProjectProps {
   projectData: Project;
@@ -41,14 +42,7 @@ const HeaderProject = ({ projectData, isOwner }: HeaderProjectProps) => {
                 href={projectData.projectLink}
               />
             )}
-            {isOwner && (
-              <ButtonIcon
-                Icon={PenIcon}
-                size={12}
-                variant="ghost"
-                className="text-slate-400 opacity-0 invisible group-hover:opacity-100 group-hover:visible"
-              />
-            )}
+            {isOwner && <ProjectFormSheet project={projectData} />}
           </div>
           <div className="flex gap-2 -bottom-7 text-slate-500 text-sm">
             <Badge>{capitalize(projectData.state)}</Badge>
